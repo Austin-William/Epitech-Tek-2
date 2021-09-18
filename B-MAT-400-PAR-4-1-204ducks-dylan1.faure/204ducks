@@ -1,0 +1,95 @@
+#!/usr/bin/env python3
+##
+## EPITECH PROJECT, 2021
+## 204ducks
+## File description:
+## 204ducks
+##
+
+import sys
+from math import *
+
+def calcul_deriv(a, t):
+    result = -a * exp(-t) - (4 - 3 * a) / 2 * exp(-2 * t) - (2 * a - 4) / 4 * exp(-4 * t)
+    return (result)
+
+def calcul_prob(a, t):
+    result = a * exp(-t) + (4 - 3 * a) * exp(-2 * t) + (2 * a - 4) * exp(-4 * t)
+    return (result)
+
+def calcul_average_time(a):
+    result = 0.0
+    time = 0.0
+    while time < 10:
+        result += calcul_prob(a, time) * time / 1000
+        time += 0.001
+    return (result)
+
+def calcul_standard_deviation(dev, average_time):
+    t = 0.0
+    result = 0.0
+    while t < 100:
+        result += pow(t - average_time, 2) * calcul_prob(dev, t) / 1000
+        t += 0.001
+    return (sqrt(result))
+
+def calcul_duck_50(a):
+    t = 0.0
+    while t < 1000:
+        if (calcul_deriv(a, t / 60) - calcul_deriv(a, 0)) * 100 >= 50:
+            return (t)
+        t += 0.002
+    print("Problem calcul when duck come back 50%%")
+    exit (84)
+
+def calcul_duck_99(a):
+    t = 0.0
+    tmp = 0.0
+    while t < 1000:
+        tmp = t / 60
+        if (calcul_deriv(a, tmp) - calcul_deriv(a, 0)) * 100 >= 99:
+            return (t)
+        t += 0.002
+    print("Problem calcul when duck come back 99%%")
+    exit (84)
+
+def display_calcul(a):
+    average_time = calcul_average_time(a)
+    standard_deviation = calcul_standard_deviation(a, average_time)
+    show_average_time = ceil((average_time * 60) % 60)
+    average_time = (average_time * 60) // 60
+    time_50_percent = calcul_duck_50(a)
+    time_99_percent = calcul_duck_99(a)
+    duck_1_percent = (calcul_deriv(a, 1) - calcul_deriv(a, 0)) * 100
+    duck_2_percent = (calcul_deriv(a, 2) - calcul_deriv(a, 0)) * 100
+    show_duck_1 = (time_50_percent / 60, (time_50_percent % 60) / 10, time_50_percent % 10)
+    show_duck_2 = (time_99_percent / 60, (time_99_percent % 60) / 10, time_99_percent % 10)
+    print("Average return time:  " + "%.0f" % average_time + "m " + "%ds" % show_average_time)
+    print("Standard deviation:  " + "%.3f" % standard_deviation)
+    print("Time after which 50%% of the ducks come back:  %dm %d%ds" % show_duck_1)
+    print("Time after which 99%% of the ducks come back:  %dm %d%ds" % show_duck_2)
+    print("Percentage of ducks back after 1 minute:  %.1f%%" % duck_1_percent)
+    print("Percentage of ducks back after 2 minutes:  %.1f%%" % duck_2_percent)
+
+
+if (len(sys.argv) < 2 or len(sys.argv) > 2):
+    print("The program needs 1 argument.")
+    exit (84)
+
+if (sys.argv[1] == "-h"):
+    print("USAGE")
+    print("    ./204ducks a\n")
+    print("DESCRIPTION")
+    print("     a       constant")
+    exit (0)
+else:
+    try:
+        nb1 = float(sys.argv[1])
+        if (nb1 < 0 or nb1 > 2.5):
+            print("Value should be between 0 and 2.5")
+            exit (84)
+        display_calcul(nb1)
+        exit (0)
+    except ValueError:
+        print("Invalid parameter(s).")
+        exit (84)

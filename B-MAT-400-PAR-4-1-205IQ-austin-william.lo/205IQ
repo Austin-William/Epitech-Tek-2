@@ -1,0 +1,89 @@
+#!/usr/bin/env python3
+##
+## EPITECH PROJECT, 2021
+## 205IQ
+## File description:
+## 205IQ
+##
+
+import sys
+from math import *
+
+tab = list()
+
+def normal_distribution(nb1, nb2):
+    result = 0.0
+    a = 0
+    while (a <= 200):
+        result = 1 / (nb2 * sqrt(2 * pi)) * exp(-0.5 * pow((a - nb1) / nb2, 2))
+        tab.append(result * 100)
+        a += 1
+
+def calcul_iq_normal_distri(nb1, nb2, a):
+    result = 1 / (nb2 * sqrt(2 * pi)) * exp(-0.5 * pow((a - nb1) / nb2, 2))
+    return (result)
+
+def calcul_iq_1_arg(nb1, nb2, iq1):
+    a = 0.0
+    iq_result = 0.0
+    while (a < iq1):
+        iq_result += calcul_iq_normal_distri(nb1, nb2, a)
+        a += 0.01
+    print("%0.1f%% of people have a IQ inferior to %d" % (iq_result, iq1))
+
+def calcul_iq_2_arg(nb1, nb2, iq1, iq2):
+    a = iq1 * 1.0
+    iq_result = 0.0
+    while (a < iq2):
+        iq_result += calcul_iq_normal_distri(nb1, nb2, a)
+        a += 0.01
+    print("%0.1f%% of people have a IQ between %d and %d" % (iq_result, iq1, iq2))
+
+def display_loop(nb1, nb2):
+    a = 0
+    normal_distribution(nb1, nb2)
+    while (a <= 200):
+        print("%d %0.5f" % (a, tab[a]))
+        a += 1
+
+if (len(sys.argv) < 2 or len(sys.argv) > 5):
+    print("The program needs 4 argument.")
+    exit (84)
+
+if (sys.argv[1] == "-h"):
+    print("USAGE")
+    print("    ./205IQ u s [IQ1] [IQ2]\n")
+    print("DESCRIPTION")
+    print("     u       mean")
+    print("     s       standard deviation")
+    print("     IQ1     minimum IQ")
+    print("     IQ2     maximum IQ")
+    exit (0)
+else:
+    try:
+        tab = []
+        nb1 = int(sys.argv[1])
+        nb2 = int(sys.argv[2])
+        if (len(sys.argv) == 4):
+            iq1 = int(sys.argv[3])
+            if (iq1 < 0 or iq1 > 200):
+                print("Error IQ input")
+                exit (84)
+            calcul_iq_1_arg(nb1, nb2, iq1)
+            exit (0)
+        elif (len(sys.argv) == 5):
+            iq1 = int(sys.argv[3])
+            iq2 = int(sys.argv[4])
+            if (iq1 < 0 or iq2 < 0 or iq1 > iq2 or iq2 > 200):
+                print("Error IQ input")
+                exit (84)
+            calcul_iq_2_arg(nb1, nb2, iq1, iq2)
+            exit (0)
+        if (nb1 < 0 or nb2 < 0):
+            print("Value should be a positiv number")
+            exit (84)
+        display_loop(nb1, nb2)
+        exit (0)
+    except ValueError:
+        print("Invalid parameter(s).")
+        exit (84)

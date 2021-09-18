@@ -1,0 +1,59 @@
+#!/usr/bin/env python3
+##
+## EPITECH PROJECT, 2021
+## 203hotline.py
+## File description:
+## 203hotline.py
+##
+
+import sys
+from math import *
+
+def binom_coeff(nb1, nb2):
+    result = factorial(nb1) / (factorial(nb2) * factorial(nb1 - nb2))
+    print("%d-combinations of a set of size %d:\n%d" %(nb2, nb1, result))
+
+def binom_distrib(nb1):
+    #print "Binomial distribution:\n",
+    print ("Binomial distribution:\n", end='')
+    a = 0
+    b = nb1 / (8 * 60 * 60)
+    overload = 0
+    while (a <= 50):
+        result = factorial(a) / (factorial(b) * factorial(a - b))
+        result = result * b ** a * ((1 - b) ** (nb1 - b))
+        #print "%d -> %0.3f" %(a, result),
+        print ("%d -> %0.3f" %(a, result), end='')
+        if (a > 25):
+            overload += result
+        if ((a != 0 and (a + 1) % 5 == 0) or a == 50):
+            print ("\n", end='')
+        else:
+            print ("\t", end='')
+        a += 1
+
+if (len(sys.argv) < 2 or len(sys.argv) > 3):
+    print("The program need at least 2 or 3 arguments.")
+    exit (84)
+
+if (sys.argv[1] == "-h"):
+    print("USAGE")
+    print("    ./203hotline [n k | d]\n")
+    print("DESCRIPTION")
+    print("    n      n value for the computation of C(n, k)")
+    print("    k      k value for the computation of C(n, k)")
+    print("    d      average duration of calls (in seconds)")
+    exit (0)
+else:
+    try:
+        nb1 = int(sys.argv[1])
+        if (len(sys.argv) == 3):
+            nb2 = int(sys.argv[2])
+            binom_coeff(nb1, nb2)
+            exit (0)
+        else:
+            binom_distrib(nb1)
+            exit (0)
+    except ValueError:
+        print("Invalid parameter(s).")
+        exit (84)
